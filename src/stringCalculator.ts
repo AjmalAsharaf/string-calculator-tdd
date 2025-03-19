@@ -3,9 +3,19 @@ export function add(numbers: string): number {
 
   let delimiter = /,|\n/;
   if (numbers.startsWith("//")) {
-    const parts = numbers.split("\n");
-    delimiter = new RegExp(parts[0].slice(2)); // Extract custom delimiter
-    numbers = parts[1];
+    const parts = numbers.split("\n"); // Separate delimiter from numbers
+    const delimiterMatch = parts[0].match(/\[(.*?)\]/);
+
+    if (delimiterMatch) {
+      // Extract the delimiter inside brackets
+      delimiter = new RegExp(
+        delimiterMatch[1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      );
+    } else {
+      delimiter = new RegExp(parts[0].slice(2)); // Single-character custom delimiter
+    }
+
+    numbers = parts[1]; // Update numbers to exclude delimiter definition
   }
 
   const numList = numbers.split(delimiter).map(Number);
