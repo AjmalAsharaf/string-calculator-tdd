@@ -2,20 +2,22 @@ export function add(numbers: string): number {
   if (!numbers) return 0;
 
   let delimiter = /,|\n/;
+
   if (numbers.startsWith("//")) {
     const parts = numbers.split("\n"); // Separate delimiter from numbers
     const delimiterMatch = parts[0].match(/\[(.*?)\]/);
 
     if (delimiterMatch) {
-      // Extract the delimiter inside brackets
-      delimiter = new RegExp(
-        delimiterMatch[1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      // Extract multiple delimiters and escape regex special characters
+      const delimiters = delimiterMatch.map((d) =>
+        d.slice(1, -1).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
       );
+      delimiter = new RegExp(delimiters.join("|"));
     } else {
-      delimiter = new RegExp(parts[0].slice(2)); // Single-character custom delimiter
+      delimiter = new RegExp(parts[0].slice(2));
     }
 
-    numbers = parts[1]; // Update numbers to exclude delimiter definition
+    numbers = parts[1];
   }
 
   const numList = numbers.split(delimiter).map(Number);
