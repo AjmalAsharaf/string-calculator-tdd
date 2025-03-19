@@ -11,3 +11,7 @@ test("Single number returns itself", () => {
 test("Two numbers should return their sum", () => {
   expect(add("1,2")).toBe(3);
 });
+
+test("Multiple numbers should return their sum", () => {
+  expect(add("1,2,3,4")).toBe(10);
+});
