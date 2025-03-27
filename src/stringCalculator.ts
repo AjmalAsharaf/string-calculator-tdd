@@ -3,9 +3,14 @@ export function add(numbers: string): number {
 
   let delimiterRegex = /,|\n/; // Default delimiters: comma & newline
 
+  let muliplyFlag = false;
   if (numbers.startsWith("//")) {
     const parts = numbers.split("\n"); // Split custom delimiter and numbers
+
     const delimiterSection = parts[0].slice(2); // Remove "//" prefix
+    if (delimiterSection === "*") {
+      muliplyFlag = true;
+    }
 
     // Handle multiple delimiters of any length
     const delimiters = [...delimiterSection.matchAll(/\[(.*?)\]/g)].map(
@@ -28,11 +33,15 @@ export function add(numbers: string): number {
 
   const numList = numbers.split(delimiterRegex).map(Number);
   const negatives = numList.filter((num) => num < 0);
-
   if (negatives.length) {
     throw new Error(`negative numbers not allowed ${negatives.join(", ")}`);
   }
 
+  if (muliplyFlag) {
+    return numList
+      .filter((num) => num <= 1000)
+      .reduce((sum, num) => sum * num, 1);
+  }
   return numList
     .filter((num) => num <= 1000)
     .reduce((sum, num) => sum + num, 0);

@@ -43,3 +43,7 @@ test("Support multiple delimiters", () => {
 test("Support multiple delimiters of any length", () => {
   expect(add("//[***][%%%][##]\n1***2%%%3##4")).toBe(10);
 });
+
+test("Multiply the number on asteric", () => {
+  expect(add("//*\n1*2")).toBe(2);
+});
